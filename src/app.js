@@ -1,18 +1,22 @@
 const express = require('express');
+const sequelize = require('./config/database');
 const cors = require('cors');
+const authRoutes = require('./routes/authRoute');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cors());
 
-// Hello world 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+//Routes
+app.use('/api/auth', authRoutes);
 
 const linkConsole = `http://localhost:${port}`;
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${linkConsole}`);
+sequelize.sync().then(() => {
+    console.log(`Connected to database ${linkConsole}`);
+    app.listen(port, () => {
+        console.log(`Server is running on port ${linkConsole}`);
+    });
 });
