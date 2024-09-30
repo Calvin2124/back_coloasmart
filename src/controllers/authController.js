@@ -12,7 +12,7 @@ exports.register = async (req, res, next) => {
         // Vérifier si l'utilisateur existe déjà
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
-            return res.status(409).json({ message: true });
+            return res.status(409).json({ message: 'User already exist' });
         }
 
         const user = await User.create({ username, email, password_hash });
@@ -36,7 +36,8 @@ exports.login = async (req, res, next) => {
         }
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '6h' });
         const idUser = user.id;
-        res.status(200).json({ message: 'Connexion réussie', token, idUser });
+        const username = user.username;
+        res.status(200).json({ message: true, token, idUser, username });
     } catch (err) {
         next(err);
     }
