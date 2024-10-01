@@ -13,7 +13,7 @@ const Group = sequelize.define('Group', {
         allowNull: false,
         unique: true,
     },
-    password_hash: {
+    password: {
         type: DataTypes.STRING,
         allowNull: false,
     },
@@ -21,11 +21,11 @@ const Group = sequelize.define('Group', {
 
 Group.beforeCreate(async (group) => {
     const salt = await bcrypt.genSalt(10);
-    group.password_hash = await bcrypt.hash(group.password_hash, salt);
+    group.password = await bcrypt.hash(group.password, salt);
 });
 
-Group.prototype.comparePassword = async function (password_hash) {
-    return await bcrypt.compare(password_hash, this.password_hash);
+Group.prototype.comparePassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
 };
 
 module.exports = Group;

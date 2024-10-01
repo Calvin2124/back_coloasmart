@@ -1,19 +1,39 @@
 const { User, Group, UserGroup } = require('../models');
 
 exports.createGroup = async (req, res) => {
-try {
+    try {
     const { name, password, userId } = req.body;
-    
+    console.log("Received data:", { name, password, userId });
+
+    // Vérifier si l'utilisateur existe
+    const user = await User.findByPk(userId);
+    if (!user) {
+        return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    }
+
+    // Créer le groupe
     const group = await Group.create({ name, password });
-    await UserGroup.create({ UserId: userId, GroupId: group.id, isAdmin: true });
+    console.log("Group created:", group.toJSON());
+
+    // Créer l'association UserGroup
+    const userGroup = await UserGroup.create({
+        userId: userId,
+        groupId: group.id,
+        isAdmin: true
+    });
+    console.log("UserGroup created:", userGroup.toJSON());
 
     res.status(201).json({ message: 'Groupe créé avec succès', group });
-} catch (error) {
+    } catch (error) {
+    console.error("Error in createGroup:", error);
     if (error.name === 'SequelizeUniqueConstraintError') {
-    return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
+        return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
+    }
+    if (error.name === 'SequelizeValidationError') {
+        return res.status(400).json({ message: 'Erreur de validation', errors: error.errors });
     }
     res.status(500).json({ message: 'Erreur lors de la création du groupe', error: error.message });
-}
+    }
 };
 
 exports.joinGroup = async (req, res) => {

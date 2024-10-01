@@ -16,7 +16,12 @@ app.use('/api/auth', authRoutes);
 app.get('/home/connected', verifyToken, (req, res) => {
     res.json({ message: 'Connexion réussie' });
 });
-app.get('/api/group', groupRoute);
+app.use('/api/group', groupRoute);
+
+// hello world
+app.get('/', (req, res) => {
+    res.send('Hello World!');
+});
 
 const linkConsole = `http://localhost:${port}`;
 
