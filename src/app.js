@@ -4,6 +4,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoute');
 const verifyToken = require('./middlewares/verifyToken');
 const groupRoute = require('./routes/groupRoute');
+const homeRoute = require('./routes/homeRoute');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,9 +14,7 @@ app.use(cors());
 
 //Routes
 app.use('/api/auth', authRoutes);
-app.get('/home/connected', verifyToken, (req, res) => {
-    res.json({ message: 'Connexion réussie' });
-});
+app.use('/api/home', verifyToken, homeRoute);
 app.use('/api/group', groupRoute);
 
 // hello world

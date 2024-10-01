@@ -1,9 +1,9 @@
 const { User, Group, UserGroup } = require('../models');
+const bcryptjs = require('bcryptjs');
 
 exports.createGroup = async (req, res) => {
     try {
     const { name, password, userId } = req.body;
-    console.log("Received data:", { name, password, userId });
 
     // Vérifier si l'utilisateur existe
     const user = await User.findByPk(userId);
@@ -13,7 +13,6 @@ exports.createGroup = async (req, res) => {
 
     // Créer le groupe
     const group = await Group.create({ name, password });
-    console.log("Group created:", group.toJSON());
 
     // Créer l'association UserGroup
     const userGroup = await UserGroup.create({
@@ -21,11 +20,9 @@ exports.createGroup = async (req, res) => {
         groupId: group.id,
         isAdmin: true
     });
-    console.log("UserGroup created:", userGroup.toJSON());
 
     res.status(201).json({ message: 'Groupe créé avec succès', group });
     } catch (error) {
-    console.error("Error in createGroup:", error);
     if (error.name === 'SequelizeUniqueConstraintError') {
         return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
     }
@@ -37,32 +34,59 @@ exports.createGroup = async (req, res) => {
 };
 
 exports.joinGroup = async (req, res) => {
-try {
-    const { userId, groupName, password } = req.body;
-    
-    const group = await Group.findOne({ where: { name: groupName } });
-    if (!group) {
-    return res.status(404).json({ message: 'Groupe non trouvé.' });
-    }
-    
-    const isPasswordValid = await bcrypt.compare(password, group.password);
-    if (!isPasswordValid) {
-    return res.status(401).json({ message: 'Mot de passe incorrect pour le groupe.' });
-    }
+    try {
+        const { userId, groupName, password } = req.body;
 
-    const [userGroup, created] = await UserGroup.findOrCreate({
-    where: { UserId: userId, GroupId: group.id },
-    defaults: { isAdmin: false }
-    });
+        if (!userId || !groupName || !password) {
+            return res.status(400).json({ message: 'Tous les champs sont requis.' });
+        }
 
-    if (!created) {
-    return res.status(400).json({ message: 'L\'utilisateur est déjà membre de ce groupe.' });
+        // Convertir userId en nombre
+        const userIdNum = parseInt(userId, 10);
+        if (isNaN(userIdNum)) {
+            return res.status(400).json({ message: 'UserId invalide.' });
+        }
+
+        const group = await Group.findOne({ where: { name: groupName } });
+        if (!group) {
+            return res.status(404).json({ message: 'Groupe non trouvé.' });
+        }
+
+        if (!group.password) {
+            return res.status(500).json({ message: 'Erreur de configuration du groupe.' });
+        }
+
+        try {
+            const isPasswordValid = await bcryptjs.compare(password, group.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: 'Mot de passe incorrect pour le groupe.' });
+            }
+        } catch (bcryptError) {
+            return res.status(500).json({ message: 'Erreur lors de la vérification du mot de passe.' });
+        }
+
+        try {
+            const [userGroup, created] = await UserGroup.findOrCreate({
+                where: { userId: userIdNum, groupId: group.id },
+                defaults: { 
+                    userId: userIdNum,
+                    groupId: group.id,
+                    isAdmin: false 
+                }
+            });
+
+            if (!created) {
+                return res.status(400).json({ message: 'L\'utilisateur est déjà membre de ce groupe.' });
+            }
+            res.status(200).json({ message: 'Utilisateur ajouté au groupe avec succès' });
+        } catch (dbError) {
+            console.error('Erreur lors de l\'ajout de l\'utilisateur au groupe:', dbError);
+            res.status(500).json({ message: "Erreur lors de l'ajout de l'utilisateur au groupe", error: dbError.message });
+        }
+    } catch (error) {
+        console.error('Erreur générale:', error);
+        res.status(500).json({ message: "Erreur interne du serveur", error: error.message });
     }
-
-    res.status(200).json({ message: 'Utilisateur ajouté au groupe avec succès' });
-} catch (error) {
-    res.status(500).json({ message: "Erreur lors de l'ajout de l'utilisateur au groupe", error: error.message });
-}
 };
 
 exports.leaveGroup = async (req, res) => {
@@ -75,7 +99,7 @@ try {
     }
 
     const userGroup = await UserGroup.findOne({ 
-    where: { UserId: userId, GroupId: group.id }
+    where: { userId: userId, groupId: group.id }
     });
 
     if (!userGroup) {
