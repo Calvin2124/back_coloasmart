@@ -4,6 +4,7 @@ const bcryptjs = require('bcryptjs');
 exports.createGroup = async (req, res) => {
     try {
     const { name, password, userId } = req.body;
+    const trimmedName = name.trim();
 
     // Vérifier si l'utilisateur existe
     const user = await User.findByPk(userId);
@@ -11,11 +12,17 @@ exports.createGroup = async (req, res) => {
         return res.status(404).json({ message: 'Utilisateur non trouvé' });
     }
 
+    // Vérifier si le groupe existe déjà
+    const existingGroup = await Group.findOne({ where: { name: trimmedName } });
+    if (existingGroup) {
+        return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
+    }
+
     // Créer le groupe
-    const group = await Group.create({ name, password });
+    const group = await Group.create({ name: trimmedName, password });
 
     // Créer l'association UserGroup
-    const userGroup = await UserGroup.create({
+    await UserGroup.create({
         userId: userId,
         groupId: group.id,
         isAdmin: true
@@ -23,6 +30,9 @@ exports.createGroup = async (req, res) => {
 
     res.status(201).json({ message: 'Groupe créé avec succès', group });
     } catch (error) {
+    console.log('Error type:', error.name);
+    console.log('Error message:', error.message);
+    
     if (error.name === 'SequelizeUniqueConstraintError') {
         return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
     }
