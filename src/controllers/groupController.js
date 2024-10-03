@@ -150,3 +150,17 @@ try {
     res.status(500).json({ message: "Erreur lors de la récupération des groupes de l'utilisateur", error: error.message });
 }
 };
+
+// Chercher un groupe par son id et créer un midleware pour vérifier si le groupe existe et l'utilisateur est membre
+exports.getGroup = async (req, res) => {
+    try {
+        const { groupId } = req.params;
+        const group = await Group.findByPk(groupId);
+        if (!group) {
+            return res.status(404).json({ message: 'Groupe non trouvé.' });
+        }
+        res.status(200).json(group);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération du groupe", error: error.message });
+    }
+};
