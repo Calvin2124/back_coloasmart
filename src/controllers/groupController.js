@@ -1,7 +1,28 @@
-const { User, Group, UserGroup } = require('../models');
+const { User, Group, UserGroup, Tag } = require('../models');
 const bcryptjs = require('bcryptjs');
 
 exports.createGroup = async (req, res) => {
+    
+    // try {
+    //     const { nameTag, colorTag } = Tag
+
+    //     // Vérifier si le tag existe déjà
+    //     const createTag = await Tag.create({ name: nameTag, color: colorTag });
+    //     res.status(201).json({ message: 'Tag créé avec succès', tag: createTag });
+    // } catch (error) {
+    //     console.log('Error type:', error.name);
+    //     console.log('Error message:', error.message);
+        
+    //     if (error.name === 'SequelizeUniqueConstraintError') {
+    //         return res.status(400).json({ message: 'Un tag avec ce nom existe déjà.' });
+    //     }
+    //     if (error.name === 'SequelizeValidationError') {
+    //         return res.status(400).json({ message: 'Erreur de validation', errors: error.errors });
+    //     }
+    //     res.status(500).json({ message: 'Erreur lors de la création du tag', error: error.message });
+    // }
+
+
     try {
     const { name, password, userId } = req.body;
     const trimmedName = name.trim();
