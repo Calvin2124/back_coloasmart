@@ -126,8 +126,7 @@ try {
 
 exports.getUserGroups = async (req, res) => {
 try {
-    const { userId } = req.params;
-    
+    const userId = req.body.id;
     const user = await User.findByPk(userId, {
     include: [{
         model: Group,
