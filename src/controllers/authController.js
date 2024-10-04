@@ -28,7 +28,7 @@ exports.login = async (req, res, next) => {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            return res.status(404).json({ message: 'Email ou mot de passe invalide' });
+            return res.status(404).json({ message: false, error: 'Email ou mot de passe invalide' });
         }
         const isPasswordCorrect = await user.comparePassword(password);
         if (!isPasswordCorrect) {

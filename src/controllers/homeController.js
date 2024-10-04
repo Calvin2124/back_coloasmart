@@ -30,3 +30,8 @@ exports.connected = async (req, res, next) => {
         return res.status(500).json({ message: "Erreur lors de la récupération des groupes de l'utilisateur", error: error.message });
     }
 };
+
+exports.isConnected = async (req, res, next) => {
+    // retourner true si l'utilisateur est connecté, false sinon
+    return res.status(200).json({ isConnected: true }); 
+};
