@@ -23,4 +23,16 @@ Group.prototype.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password);
 };
 
+Group.associate = (models) => {
+    Group.belongsToMany(models.DefaultTag, {
+    through: 'GroupDefaultTag',
+    foreignKey: 'groupId'
+    });
+    Group.hasMany(models.GroupTag, {
+    foreignKey: 'groupId',
+    as: 'customTags'
+    });
+    // ... autres associations existantes ...
+};
+
 module.exports = Group;

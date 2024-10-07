@@ -1,66 +1,70 @@
-const { User, Group, UserGroup, Tag } = require('../models');
+const { User, Group, UserGroup, DefaultTag, GroupDefaultTag } = require('../models');
 const bcryptjs = require('bcryptjs');
 
 exports.createGroup = async (req, res) => {
-    
-    // try {
-    //     const { nameTag, colorTag } = Tag
-
-    //     // Vérifier si le tag existe déjà
-    //     const createTag = await Tag.create({ name: nameTag, color: colorTag });
-    //     res.status(201).json({ message: 'Tag créé avec succès', tag: createTag });
-    // } catch (error) {
-    //     console.log('Error type:', error.name);
-    //     console.log('Error message:', error.message);
-        
-    //     if (error.name === 'SequelizeUniqueConstraintError') {
-    //         return res.status(400).json({ message: 'Un tag avec ce nom existe déjà.' });
-    //     }
-    //     if (error.name === 'SequelizeValidationError') {
-    //         return res.status(400).json({ message: 'Erreur de validation', errors: error.errors });
-    //     }
-    //     res.status(500).json({ message: 'Erreur lors de la création du tag', error: error.message });
-    // }
-
-
     try {
-    const { name, password, userId } = req.body;
-    const trimmedName = name.trim();
+        const { name, password, userId } = req.body;
+        const trimmedName = name.trim();
 
-    // Vérifier si l'utilisateur existe
-    const user = await User.findByPk(userId);
-    if (!user) {
-        return res.status(404).json({ message: 'Utilisateur non trouvé' });
-    }
+        // Vérifier si l'utilisateur existe
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
 
-    // Vérifier si le groupe existe déjà
-    const existingGroup = await Group.findOne({ where: { name: trimmedName } });
-    if (existingGroup) {
-        return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
-    }
+        // Vérifier si le groupe existe déjà
+        const existingGroup = await Group.findOne({ where: { name: trimmedName } });
+        if (existingGroup) {
+            return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
+        }
 
-    // Créer le groupe
-    const group = await Group.create({ name: trimmedName, password });
+        // Créer le groupe
+        const group = await Group.create({ name: trimmedName, password });
 
-    // Créer l'association UserGroup
-    await UserGroup.create({
-        userId: userId,
-        groupId: group.id,
-        isAdmin: true
-    });
+        // Créer l'association UserGroup
+        await UserGroup.create({
+            userId: userId,
+            groupId: group.id,
+            isAdmin: true
+        });
 
-    res.status(201).json({ message: 'Groupe créé avec succès', group });
+        // Récupérer tous les tags par défaut
+        const defaultTags = await DefaultTag.findAll();
+
+        // Associer les tags par défaut au groupe
+        await Promise.all(defaultTags.map(tag => 
+            GroupDefaultTag.create({ groupId: group.id, defaultTagId: tag.id })
+        ));
+
+        // Récupérer le groupe avec ses tags associés
+        const groupWithTags = await Group.findByPk(group.id, {
+            include: [
+                { 
+                    model: DefaultTag,
+                    through: { attributes: [] } // Cela exclut les attributs de la table de jointure
+                }
+            ]
+        });
+
+        res.status(201).json({ 
+            message: 'Groupe créé avec succès', 
+            group: {
+                id: groupWithTags.id,
+                name: groupWithTags.name,
+                tags: groupWithTags.DefaultTags
+            }
+        });
     } catch (error) {
-    console.log('Error type:', error.name);
-    console.log('Error message:', error.message);
-    
-    if (error.name === 'SequelizeUniqueConstraintError') {
-        return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
-    }
-    if (error.name === 'SequelizeValidationError') {
-        return res.status(400).json({ message: 'Erreur de validation', errors: error.errors });
-    }
-    res.status(500).json({ message: 'Erreur lors de la création du groupe', error: error.message });
+        console.log('Error type:', error.name);
+        console.log('Error message:', error.message);
+        
+        if (error.name === 'SequelizeUniqueConstraintError') {
+            return res.status(400).json({ message: 'Un groupe avec ce nom existe déjà.' });
+        }
+        if (error.name === 'SequelizeValidationError') {
+            return res.status(400).json({ message: 'Erreur de validation', errors: error.errors });
+        }
+        res.status(500).json({ message: 'Erreur lors de la création du groupe', error: error.message });
     }
 };
 

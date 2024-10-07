@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoute');
 const verifyToken = require('./middlewares/verifyToken');
 const groupRoute = require('./routes/groupRoute');
 const homeRoute = require('./routes/homeRoute');
+const defaultTagRoute = require('./routes/defaultTagRoute');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -16,6 +17,7 @@ app.use(cors());
 app.use('/api/auth', authRoutes);
 app.use('/api/home', verifyToken, homeRoute);
 app.use('/api/group', groupRoute);
+app.use('/api/defaultTags', defaultTagRoute);
 
 // hello world
 app.get('/', (req, res) => {

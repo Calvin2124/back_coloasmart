@@ -1,6 +1,5 @@
 const Sequelize = require('sequelize');
 require('dotenv').config();
-const tags = require('./dataApp/TagDefault');
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -18,7 +17,6 @@ async function initializeDatabase() {
         // Tester la connexion
         await sequelize.authenticate();
         console.log('Connection to the database has been established successfully.');
-        console.log(tags)
 
         // Synchroniser les modèles avec la base de données
         await sequelize.sync({ alter: false });
