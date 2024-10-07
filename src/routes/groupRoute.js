@@ -6,6 +6,7 @@ router.post('/create', groupController.createGroup);
 router.post('/join', groupController.joinGroup);
 router.post('/leave', groupController.leaveGroup);
 router.post('/list', groupController.getUserGroups);
-router.post('/:groupId', groupController.getGroup);
+router.post('/:groupId', groupController.getGroupMember);
+
 
 module.exports = router;

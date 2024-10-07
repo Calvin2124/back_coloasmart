@@ -1,6 +1,8 @@
 const { User, Group, UserGroup, DefaultTag, GroupDefaultTag } = require('../models');
 const bcryptjs = require('bcryptjs');
 
+
+// Créer un groupe, assigne les droits administrateur au créateur du groupe et ajoute les tags par défaut
 exports.createGroup = async (req, res) => {
     try {
         const { name, password, userId } = req.body;
@@ -68,6 +70,7 @@ exports.createGroup = async (req, res) => {
     }
 };
 
+// Rejoindre un groupe
 exports.joinGroup = async (req, res) => {
     try {
         const { userId, groupName, password } = req.body;
@@ -124,6 +127,7 @@ exports.joinGroup = async (req, res) => {
     }
 };
 
+// Quitter un groupe
 exports.leaveGroup = async (req, res) => {
 try {
     const { userId, groupName } = req.body;
@@ -149,6 +153,8 @@ try {
 }
 };
 
+
+// Affiche les groupes de l'utilisateur dans homeConnected
 exports.getUserGroups = async (req, res) => {
 try {
     const userId = req.body.id;
@@ -175,16 +181,22 @@ try {
 }
 };
 
-// Chercher un groupe par son id et créer un midleware pour vérifier si le groupe existe et l'utilisateur est membre
-exports.getGroup = async (req, res) => {
+// rechercher un membre par son id dans un groupe 
+exports.getGroupMember = async (req, res) => {
     try {
-        const { groupId } = req.params;
+        const { groupId, userId } = req.body;
         const group = await Group.findByPk(groupId);
         if (!group) {
             return res.status(404).json({ message: 'Groupe non trouvé.' });
         }
-        res.status(200).json(group);
+        const userGroup = await UserGroup.findOne({
+            where: { userId: userId, groupId: group.id }
+        });
+        if (!userGroup) {
+            return res.status(400).json({ message: 'L\'utilisateur n\'est pas membre de ce groupe.' });
+        }
+        res.status(200).json({ message: 'Utilisateur trouvé avec succès', user: userGroup.User, group: userGroup.Group });
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la récupération du groupe", error: error.message });
+        res.status(500).json({ message: "Erreur lors de la récupération du membre du groupe", error: error.message });
     }
 };
