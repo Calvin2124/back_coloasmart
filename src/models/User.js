@@ -2,6 +2,28 @@ const  { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const bcrypt = require('bcryptjs');
 
+/**
+ * Represents a user in the database.
+ * 
+ * @module User
+ * @requires sequelize
+ * @requires sequelize.DataTypes
+ * @requires bcrypt
+ * 
+ * @property {string} username - The username of the user. Cannot be null.
+ * @property {string} email - The email of the user. Must be unique and cannot be null.
+ * @property {string} password_hash - The hashed password of the user. Cannot be null.
+ * 
+ * @constant {Model} User - Sequelize model representing the Users table in the database.
+ * 
+ * @method comparePassword - Compares a given password with the stored hashed password.
+ * @param {string} password_hash - The password to compare.
+ * @returns {Promise<boolean>} - Resolves to true if the password matches, false otherwise.
+ * 
+ * @function beforeCreate
+ * @param {User} user - The user instance being created.
+ * @description Hashes the password before creating a new user.
+ */
 const User = sequelize.define('Users', {
     username: {
     type: DataTypes.STRING,

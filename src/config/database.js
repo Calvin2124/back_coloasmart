@@ -14,7 +14,16 @@ const sequelize = new Sequelize(
 
 /**
  * Initializes the database connection and synchronizes the models with the database.
- * @returns {Promise<void>} A promise that resolves when the database is initialized and synchronized successfully.
+ * 
+ * This function attempts to authenticate the connection to the database and then 
+ * synchronize the models. If any errors occur during the process, 
+ * an error message is logged and the process is exited.
+ * 
+ * @async
+ * @function initializeDatabase
+ * @returns {Promise<void>} - Resolves if the connection and synchronization are successful.
+ * 
+ * @throws {Error} - Throws an error if the connection fails or if the models cannot be synchronized.
  */
 async function initializeDatabase() {
     try {

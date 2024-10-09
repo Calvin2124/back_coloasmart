@@ -1,4 +1,32 @@
-const { User, Group, UserGroup, DefaultTag, GroupDefaultTag } = require('../models');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controllers/groupController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controllers/groupController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const { User, Group, UserGroup, DefaultTag, GroupDefaultTag } = require('../models');
 const bcryptjs = require('bcryptjs');
 
 
@@ -13,7 +41,7 @@ const bcryptjs = require('bcryptjs');
  * @param {string} req.body.password - The password for the group.
  * @param {number} req.body.userId - The ID of the user creating the group.
  * @param {Object} res - The HTTP response object.
- * @returns {Promise<void>} - Sends an HTTP response with the result of the group creation.
+ * @returns {Promise&lt;void>} - Sends an HTTP response with the result of the group creation.
  * 
  * @throws {SequelizeUniqueConstraintError} - If a group with the same name already exists.
  * @throws {SequelizeValidationError} - If validation errors occur.
@@ -97,7 +125,7 @@ exports.createGroup = async (req, res) => {
  * @param {string} req.body.groupName - The name of the group the user wants to join.
  * @param {string} req.body.password - The password for the group.
  * @param {Object} res - The HTTP response object.
- * @returns {Promise<void>} - Sends an HTTP response with the result of the user joining the group.
+ * @returns {Promise&lt;void>} - Sends an HTTP response with the result of the user joining the group.
  * 
  * @throws {Error} - Throws errors for invalid input, password validation failure, or database issues.
  */
@@ -167,7 +195,7 @@ exports.joinGroup = async (req, res) => {
  * @param {number|string} req.body.userId - The ID of the user leaving the group.
  * @param {string} req.body.groupName - The name of the group the user wants to leave.
  * @param {Object} res - The HTTP response object.
- * @returns {Promise<void>} - Sends an HTTP response indicating the result of the user's departure from the group.
+ * @returns {Promise&lt;void>} - Sends an HTTP response indicating the result of the user's departure from the group.
  * 
  * @throws {Error} - Throws errors for group not found, user not a member, or database issues.
  */
@@ -206,7 +234,7 @@ try {
  * @param {Object} req.body - The request body containing user information.
  * @param {number|string} req.body.id - The ID of the user whose groups are being retrieved.
  * @param {Object} res - The HTTP response object.
- * @returns {Promise<void>} - Sends an HTTP response with the list of groups the user is associated with.
+ * @returns {Promise&lt;void>} - Sends an HTTP response with the list of groups the user is associated with.
  * 
  * @throws {Error} - Throws errors for user not found or database issues.
  */
@@ -246,7 +274,7 @@ try {
  * @param {number|string} req.body.groupId - The ID of the group.
  * @param {number|string} req.body.userId - The ID of the user to be retrieved from the group.
  * @param {Object} res - The HTTP response object.
- * @returns {Promise<void>} - Sends an HTTP response with the user information if found.
+ * @returns {Promise&lt;void>} - Sends an HTTP response with the user information if found.
  * 
  * @throws {Error} - Throws errors for group not found, user not a member, or database issues.
  */
@@ -267,4 +295,26 @@ exports.getGroupMember = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: "Erreur lors de la récupération du membre du groupe", error: error.message });
     }
-};
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Associations.html">Associations</a></li><li><a href="module-controllers_authController.html">controllers/authController</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DefaultTag">DefaultTag</a></li><li><a href="global.html#associate">associate</a></li><li><a href="global.html#authController">authController</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#beforeCreate">beforeCreate</a></li><li><a href="global.html#connected">connected</a></li><li><a href="global.html#createGroup">createGroup</a></li><li><a href="global.html#defaultTagController">defaultTagController</a></li><li><a href="global.html#defaultTagRoute">defaultTagRoute</a></li><li><a href="global.html#getDefaultTags">getDefaultTags</a></li><li><a href="global.html#getGroupMember">getGroupMember</a></li><li><a href="global.html#getUserGroups">getUserGroups</a></li><li><a href="global.html#groupController">groupController</a></li><li><a href="global.html#homeController">homeController</a></li><li><a href="global.html#initializeDatabase">initializeDatabase</a></li><li><a href="global.html#isConnected">isConnected</a></li><li><a href="global.html#joinGroup">joinGroup</a></li><li><a href="global.html#leaveGroup">leaveGroup</a></li><li><a href="global.html#options">options</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Oct 09 2024 14:05:53 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
