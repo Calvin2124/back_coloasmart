@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: Associations</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: Associations</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">This module establishes the relationships between various models in the application.
+
+Existing relationships:
+- A user can belong to many groups, and a group can have many users, 
+  through the UserGroup join table.
+
+- Groups can have multiple default tags and vice versa, through the GroupDefaultTag join table.
+
+- Groups can have many custom tags associated with them via the GroupTag model.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_index.js.html">models/index.js</a>, <a href="models_index.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - An object containing the models and their associations.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// User-Group relationship
+User.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId', otherKey: 'groupId' });
+Group.belongsToMany(User, { through: UserGroup, foreignKey: 'groupId', otherKey: 'userId' });
+
+// Group-DefaultTag relationship
+Group.belongsToMany(DefaultTag, { through: GroupDefaultTag, foreignKey: 'groupId', otherKey: 'defaultTagId' });
+DefaultTag.belongsToMany(Group, { through: GroupDefaultTag, foreignKey: 'defaultTagId', otherKey: 'groupId' });
+
+// Group-GroupTag relationship
+Group.hasMany(GroupTag, { foreignKey: 'groupId', as: 'customTags' });
+GroupTag.belongsTo(Group, { foreignKey: 'groupId' });</code></pre>
+
+
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_index.js.html">models/index.js</a>, <a href="models_index.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - An object containing the models and their associations.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// User-Group relationship
+User.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId', otherKey: 'groupId' });
+Group.belongsToMany(User, { through: UserGroup, foreignKey: 'groupId', otherKey: 'userId' });
+
+// Group-DefaultTag relationship
+Group.belongsToMany(DefaultTag, { through: GroupDefaultTag, foreignKey: 'groupId', otherKey: 'defaultTagId' });
+DefaultTag.belongsToMany(Group, { through: GroupDefaultTag, foreignKey: 'defaultTagId', otherKey: 'groupId' });
+
+// Group-GroupTag relationship
+Group.hasMany(GroupTag, { foreignKey: 'groupId', as: 'customTags' });
+GroupTag.belongsTo(Group, { foreignKey: 'groupId' });</code></pre>
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+        <h3 class="subsection-title">Requires</h3>
+
+        <ul>
+            <li>module:User</li>
+        
+            <li>module:Group</li>
+        
+            <li>module:DefaultTag</li>
+        
+            <li>module:GroupTag</li>
+        
+            <li>module:UserGroup</li>
+        
+            <li>module:GroupDefaultTag</li>
+        </ul>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">This module establishes the relationships between various models in the application.
+
+Existing relationships:
+- A user can belong to many groups, and a group can have many users, 
+  through the UserGroup join table.
+
+- Groups can have multiple default tags and vice versa, through the GroupDefaultTag join table.
+
+- Groups can have many custom tags associated with them via the GroupTag model.</div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_index.js.html">models/index.js</a>, <a href="models_index.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - An object containing the models and their associations.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// User-Group relationship
+User.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId', otherKey: 'groupId' });
+Group.belongsToMany(User, { through: UserGroup, foreignKey: 'groupId', otherKey: 'userId' });
+
+// Group-DefaultTag relationship
+Group.belongsToMany(DefaultTag, { through: GroupDefaultTag, foreignKey: 'groupId', otherKey: 'defaultTagId' });
+DefaultTag.belongsToMany(Group, { through: GroupDefaultTag, foreignKey: 'defaultTagId', otherKey: 'groupId' });
+
+// Group-GroupTag relationship
+Group.hasMany(GroupTag, { foreignKey: 'groupId', as: 'customTags' });
+GroupTag.belongsTo(Group, { foreignKey: 'groupId' });</code></pre>
+
+
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_index.js.html">models/index.js</a>, <a href="models_index.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    - An object containing the models and their associations.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+    <h5>Example</h5>
+    
+    <pre class="prettyprint"><code>// User-Group relationship
+User.belongsToMany(Group, { through: UserGroup, foreignKey: 'userId', otherKey: 'groupId' });
+Group.belongsToMany(User, { through: UserGroup, foreignKey: 'groupId', otherKey: 'userId' });
+
+// Group-DefaultTag relationship
+Group.belongsToMany(DefaultTag, { through: GroupDefaultTag, foreignKey: 'groupId', otherKey: 'defaultTagId' });
+DefaultTag.belongsToMany(Group, { through: GroupDefaultTag, foreignKey: 'defaultTagId', otherKey: 'groupId' });
+
+// Group-GroupTag relationship
+Group.hasMany(GroupTag, { foreignKey: 'groupId', as: 'customTags' });
+GroupTag.belongsTo(Group, { foreignKey: 'groupId' });</code></pre>
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+        <h3 class="subsection-title">Requires</h3>
+
+        <ul>
+            <li>module:User</li>
+        
+            <li>module:Group</li>
+        
+            <li>module:DefaultTag</li>
+        
+            <li>module:GroupTag</li>
+        
+            <li>module:UserGroup</li>
+        
+            <li>module:GroupDefaultTag</li>
+        </ul>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Associations.html">Associations</a></li><li><a href="module-controllers_authController.html">controllers/authController</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DefaultTag">DefaultTag</a></li><li><a href="global.html#associate">associate</a></li><li><a href="global.html#authController">authController</a></li><li><a href="global.html#authMiddleware">authMiddleware</a></li><li><a href="global.html#beforeCreate">beforeCreate</a></li><li><a href="global.html#connected">connected</a></li><li><a href="global.html#createGroup">createGroup</a></li><li><a href="global.html#defaultTagController">defaultTagController</a></li><li><a href="global.html#defaultTagRoute">defaultTagRoute</a></li><li><a href="global.html#getDefaultTags">getDefaultTags</a></li><li><a href="global.html#getGroupMember">getGroupMember</a></li><li><a href="global.html#getUserGroups">getUserGroups</a></li><li><a href="global.html#groupController">groupController</a></li><li><a href="global.html#homeController">homeController</a></li><li><a href="global.html#initializeDatabase">initializeDatabase</a></li><li><a href="global.html#isConnected">isConnected</a></li><li><a href="global.html#joinGroup">joinGroup</a></li><li><a href="global.html#leaveGroup">leaveGroup</a></li><li><a href="global.html#options">options</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Wed Oct 09 2024 14:05:53 GMT+0200 (heure d’été d’Europe centrale)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

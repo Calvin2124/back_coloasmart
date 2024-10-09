@@ -1,23 +1,21 @@
 const { User, Group, UserGroup } = require('../models');
 
+/**
+ * Retrieves the groups associated with the currently connected user, including their admin status.
+ * 
+ * @async
+ * @function connected
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} req.user - The authenticated user object.
+ * @param {Object} res - The HTTP response object.
+ * @param {Function} next - The next middleware function in the stack.
+ * @returns {Promise<void>} - Sends an HTTP response with the list of groups the user is associated with.
+ * 
+ * @throws {Error} - Throws errors for user not found or database issues.
+ */
 exports.connected = async (req, res, next) => {
     try {
         // Trouver l'utilisateur et inclure les groupes associés
-        /**
-         * Retrieves the user information along with their associated group information.
-         * @typedef {Object} UserWithGroup
-         * @property {number} id - The user's ID.
-         * @property {string} name - The user's name.
-         * @property {boolean} isAdmin - Indicates if the user is an admin of the group.
-         */
-
-        /**
-         * Retrieves the user information along with their associated group information.
-         * @param {Object} req - The request object.
-         * @param {Object} req.user - The user object.
-         * @param {number} req.user.id - The user's ID.
-         * @returns {Promise<UserWithGroup>} The user information along with their associated group information.
-         */
         const user = await User.findByPk(req.user.id, {
             include: {
                 model: Group,
@@ -46,6 +44,19 @@ exports.connected = async (req, res, next) => {
     }
 };
 
+/**
+ * Checks if the user is connected and returns the connection status.
+ * 
+ * @async
+ * @function isConnected
+ * @param {Object} req - The HTTP request object.
+ * @param {Object} res - The HTTP response object.
+ * @param {Function} next - The next middleware function in the stack.
+ * @returns {Promise<void>} - Sends an HTTP response indicating the user's connection status.
+ * 
+ * @example
+ * // Returns { isConnected: true } if the user is connected.
+ */
 exports.isConnected = async (req, res, next) => {
     // retourner true si l'utilisateur est connecté, false sinon
     return res.status(200).json({ isConnected: true }); 
