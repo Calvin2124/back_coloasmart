@@ -34,6 +34,10 @@ exports.login = async (req, res, next) => {
         if (!isPasswordCorrect) {
             return res.status(401).json({ message: 'Email ou mot de passe invalide' });
         }
+        /**
+         * JSON Web Token representing the user's authentication token.
+         * @type {string}
+         */
         const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '6h' });
         const idUser = user.id;
         const username = user.username;

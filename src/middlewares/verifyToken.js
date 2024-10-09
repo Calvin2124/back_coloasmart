@@ -4,6 +4,15 @@ const { User } = require('../models');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
+/**
+ * Middleware for verifying the authentication token.
+ * 
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @param {Function} next - The next middleware function.
+ * @returns {Object} - The response object.
+ * @throws {Error} - If authentication fails or an error occurs.
+ */
 const authMiddleware = async (req, res, next) => {
     try {
         // Récupérer le token de l'en-tête Authorization

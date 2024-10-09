@@ -5,6 +5,10 @@ const authRoutes = require('./routes/authRoute');
 const verifyToken = require('./middlewares/verifyToken');
 const groupRoute = require('./routes/groupRoute');
 const homeRoute = require('./routes/homeRoute');
+/**
+ * Represents the default tag route.
+ * @type {Object}
+ */
 const defaultTagRoute = require('./routes/defaultTagRoute');
 
 const app = express();

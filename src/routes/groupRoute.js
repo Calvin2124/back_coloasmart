@@ -1,5 +1,9 @@
 const express = require('express');
 const router = express.Router();
+/**
+ * Controller for handling group-related operations.
+ * @type {import('../controllers/groupController')}
+ */
 const groupController = require('../controllers/groupController');
 
 router.post('/create', groupController.createGroup);

@@ -2,6 +2,11 @@ const { DefaultTag } = require('../models');
 
 exports.getDefaultTags = async (req, res) => {
     try {
+        /**
+         * Retrieves all default tags.
+         *
+         * @returns {Promise<Array>} The array of default tags.
+         */
         const defaultTags = await DefaultTag.findAll();
         res.status(200).json(defaultTags);
     } catch (error) {

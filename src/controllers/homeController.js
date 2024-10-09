@@ -3,6 +3,21 @@ const { User, Group, UserGroup } = require('../models');
 exports.connected = async (req, res, next) => {
     try {
         // Trouver l'utilisateur et inclure les groupes associés
+        /**
+         * Retrieves the user information along with their associated group information.
+         * @typedef {Object} UserWithGroup
+         * @property {number} id - The user's ID.
+         * @property {string} name - The user's name.
+         * @property {boolean} isAdmin - Indicates if the user is an admin of the group.
+         */
+
+        /**
+         * Retrieves the user information along with their associated group information.
+         * @param {Object} req - The request object.
+         * @param {Object} req.user - The user object.
+         * @param {number} req.user.id - The user's ID.
+         * @returns {Promise<UserWithGroup>} The user information along with their associated group information.
+         */
         const user = await User.findByPk(req.user.id, {
             include: {
                 model: Group,

@@ -104,6 +104,13 @@ exports.joinGroup = async (req, res) => {
         }
 
         try {
+            /**
+             * Finds or creates a user group.
+             *
+             * @param {number} userIdNum - The ID of the user.
+             * @param {number} group.id - The ID of the group.
+             * @returns {Promise<[UserGroup, boolean]>} - A promise that resolves to an array containing the user group and a boolean indicating if it was created.
+             */
             const [userGroup, created] = await UserGroup.findOrCreate({
                 where: { userId: userIdNum, groupId: group.id },
                 defaults: { 
