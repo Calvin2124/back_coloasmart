@@ -4,6 +4,7 @@ const UserGroup = require('./UserGroup');
 const DefaultTag = require('./DefaultTag');
 const GroupTag = require('./GroupTag');
 const GroupDefaultTag = require('./GroupDefaultTag');
+const Task = require('./Task');
 
 /**
  * Defines the associations between the User, Group, DefaultTag, and GroupTag models.
@@ -53,11 +54,18 @@ DefaultTag.belongsToMany(Group, { through: GroupDefaultTag, foreignKey: 'default
 Group.hasMany(GroupTag, { foreignKey: 'groupId', as: 'customTags' });
 GroupTag.belongsTo(Group, { foreignKey: 'groupId' });
 
+User.hasMany(Task, { foreignKey: 'idUser' });
+Task.belongsTo(User, { foreignKey: 'idUser' });
+
+Group.hasMany(Task, { foreignKey: 'groupId' });
+Task.belongsTo(Group, { foreignKey: 'groupId' });
+
 module.exports = {
     User,
     Group,
     UserGroup,
     DefaultTag,
     GroupTag,
-    GroupDefaultTag
+    GroupDefaultTag, 
+    Task
 };

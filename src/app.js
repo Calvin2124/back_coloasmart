@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoute');
 const verifyToken = require('./middlewares/verifyToken');
 const groupRoute = require('./routes/groupRoute');
 const homeRoute = require('./routes/homeRoute');
+const taskRoute = require('./routes/taskRoute');
 /**
  * Represents the default tag route.
  * @type {Object}
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/home', verifyToken, homeRoute);
 app.use('/api/group', groupRoute);
 app.use('/api/defaultTags', defaultTagRoute);
+app.use('/api/task', taskRoute);
 
 // hello world
 app.get('/', (req, res) => {
