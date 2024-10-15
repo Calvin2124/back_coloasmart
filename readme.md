@@ -98,6 +98,6 @@ JWT_SECRET= Le mot ou chaine de caractère pour vos jetons
 
 ## Contributeurs
 
-- **Votre Nom** - Calvin
+- **Calvin**
 
 Si vous souhaitez contribuer à ce projet, n'hésitez pas à soumettre une pull request ou à ouvrir une issue.

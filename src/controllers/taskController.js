@@ -1,4 +1,5 @@
-const { Task, User, Group } = require('../models');
+// taskController.js
+const Task = require('../models/Task'); // Assurez-vous d'importer votre modèle de tâche
 
 module.exports = (io) => {
     return {
@@ -6,56 +7,28 @@ module.exports = (io) => {
             try {
                 const { tagColor, taskText, dueDate, idUser, groupId } = req.body;
 
-                // Validation des données
-                if (!tagColor || !taskText || !dueDate || !idUser || !groupId) {
-                    return res.status(400).json({ message: "Tous les champs sont requis" });
-                }
+                // Créez la nouvelle tâche dans votre base de données
+                const newTask = await Task.create({ tagColor, taskText, dueDate, idUser, groupId });
 
-                // Vérification de l'existence de l'utilisateur et du groupe
-                const user = await User.findByPk(idUser);
-                const group = await Group.findByPk(groupId);
+                // Émettez l'événement `newTask` avec la nouvelle tâche à tous les clients dans le groupe
+                io.to(groupId).emit('newTask', newTask);
 
-                if (!user || !group) {
-                    return res.status(404).json({ message: "Utilisateur ou groupe non trouvé" });
-                }
-
-                const task = await Task.create({ tagColor, taskText, dueDate, idUser, groupId });
-                
-                // Émettre un événement à tous les clients connectés dans le groupe
-                io.to(groupId).emit('newTask', task);
-
-                res.status(201).json(task);
-            } catch (err) {
-                console.error("Error occurred during task creation: ", err);
-                if (err.name === 'SequelizeValidationError') {
-                    return res.status(400).json({ message: "Données invalides", errors: err.errors });
-                }
-                return res.status(500).json({ message: "Erreur interne du serveur" });
+                res.status(201).json(newTask);
+            } catch (error) {
+                console.error("Error creating task:", error);
+                res.status(500).send("Erreur lors de la création de la tâche.");
             }
         },
 
         getTasks: async (req, res) => {
             try {
                 const { idUser, groupId } = req.body;
-
-                // Validation des données
-                if (!idUser || !groupId) {
-                    return res.status(400).json({ message: "Tous les champs sont requis" });
-                }
-
-                // Vérification de l'existence de l'utilisateur et du groupe
-                const user = await User.findByPk(idUser);
-                const group = await Group.findByPk(groupId);
-
-                if (!user || !group) {
-                    return res.status(404).json({ message: "Utilisateur ou groupe non trouvé" });
-                }
-
+                // Récupérez les tâches pour l'utilisateur et le groupe spécifiés
                 const tasks = await Task.findAll({ where: { groupId } });
-                res.status(200).json(tasks);
-            } catch (err) {
-                console.error("Error occurred while fetching tasks: ", err);
-                return res.status(500).json({ message: "Erreur interne du serveur" });
+                res.json(tasks);
+            } catch (error) {
+                console.error("Error fetching tasks:", error);
+                res.status(500).send("Erreur lors de la récupération des tâches.");
             }
         }
     };
