@@ -1,11 +1,12 @@
 const express = require('express');
-const router = express.Router();
-/**
- * Controller for handling home-related functionality.
- * @type {Object}
- */
-const taskController = require('../controllers/taskController');
+const taskControllerFactory = require('../controllers/taskController');
 
-router.post('/create/', taskController.createTask);
+module.exports = (io) => {
+    const router = express.Router();
+    const taskController = taskControllerFactory(io);
 
-module.exports = router;
+    router.post('/create/', taskController.createTask);
+    router.post('/list/', taskController.getTasks);
+
+    return router;
+};
