@@ -46,7 +46,7 @@ Suivez ces étapes pour installer et configurer l'API backend.
 1. **Cloner le dépôt**
 
    ```bash
-   git clone https://github.com/votre-utilisateur/colocasmart-backend.git
+   git clone https://github.com/Calvin2124/back_coloasmart.git
    cd colocasmart-backend
    ```
    
@@ -72,12 +72,28 @@ Suivez ces étapes pour installer et configurer l'API backend.
 - **bcryptjs** : Pour le hachage des mots de passe et la sécurité des utilisateurs.
 - **dotenv** : Pour la gestion des variables d'environnement.
 - **cors** : Middleware pour gérer les requêtes Cross-Origin.
+- **jsdoc** : Outil de documentation pour générer automatiquement la documentation des projets JavaScript à partir de commentaires dans le code.
 
 ## Scripts
 
 - `npm start` : Démarre le serveur avec `nodemon`.
 - `npm run sync-db` : Synchronise la base de données avec Sequelize.
 - `npm install` : Installe les dépendances du projet.
+
+## Configuration de l'environnement 
+
+Pour que le projet fonctionne correctement, voud devez créer un fichier `.env` à la racine du projet. Ce fichier contiendra les variables d'environnement nécessaire à la configuration de l'application.
+
+### Exemple de fichier `.env`
+
+```
+PORT= Le port sur lequel l’application Node.js va être exécutée.
+DB_HOST= L’adresse de votre serveur MySQL (ex. localhost pour un serveur local).
+DB_USER= Le nom d’utilisateur MySQL.
+DB_PASSWORD= Le mot de passe de l’utilisateur MySQL.
+DB_NAME= Le nom de la base de données utilisée par l’application.
+JWT_SECRET= Le mot ou chaine de caractère pour vos jetons
+```
 
 ## Contributeurs
 
