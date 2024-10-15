@@ -11,6 +11,7 @@ Ce projet représente l'API backend de **ColocaSmart**, une application destiné
 - [Usage](#usage)
 - [Technologies utilisées](#technologies-utilisées)
 - [Scripts](#scripts)
+- [Environnement](#Configuration-de-l'environnement)
 - [Contributeurs](#contributeurs)
 
 ## Aperçu du projet
