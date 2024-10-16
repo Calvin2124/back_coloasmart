@@ -19,14 +19,14 @@ const JWT_SECRET = process.env.JWT_SECRET;
  */
 exports.register = async (req, res, next) => {
     try {
-        const { username, email, password_hash } = req.body;
+        const { username, email, password_hash, rgpd } = req.body;
 
         // Vérifier si l'utilisateur existe déjà
         const existingUser = await User.findOne({ where: { email } });
         if (existingUser) {
             return res.status(409).json({ message: 'User already exist' });
         }
-        const user = await User.create({ username, email, password_hash });
+        const user = await User.create({ username, email, password_hash, rgpd });
         res.status(201).json({ message: 'Utilisateur créé avec succès', userId: user.id });
     } catch (err) {
         console.error("Error occurred during user registration: ", err);
@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
         if (!isPasswordCorrect) {
             return res.status(401).json({ message: 'Email ou mot de passe invalide' });
         }
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '6h' });
+        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '24h' });
         const idUser = user.id;
         const username = user.username;
         res.status(200).json({ message: true, token, idUser, username });
