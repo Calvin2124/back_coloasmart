@@ -7,6 +7,7 @@ module.exports = (io) => {
 
     router.post('/create/', taskController.createTask);
     router.post('/list/', taskController.getTasks);
+    router.post('/updateStatus/', taskController.updateTaskStatus);
 
     return router;
 };
