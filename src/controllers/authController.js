@@ -52,7 +52,7 @@ exports.login = async (req, res, next) => {
         if (!isPasswordCorrect) {
             return res.status(401).json({ message: 'Email ou mot de passe invalide' });
         }
-        const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: '24h' });
+        const token = jwt.sign({ id: user.id }, JWT_SECRET);
         const idUser = user.id;
         const username = user.username;
         res.status(200).json({ message: true, token, idUser, username });

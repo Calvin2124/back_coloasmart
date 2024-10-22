@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const bcrypt = require('bcryptjs');
+const Joi = require('joi');
 
 /**
  * Represents a group in the database.
@@ -24,6 +25,25 @@ const bcrypt = require('bcryptjs');
  * @description Defines associations with other models, including DefaultTag and GroupTag.
  */
 
+const validatePassword = (password) => {
+    const schema = Joi.string()
+        .min(4) // Minimum length
+        .max(30) // Maximum length
+        // .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])')) // Required complexity
+        .required();
+
+    return schema.validate(password);
+}
+// Fonction de validation de l'email
+const validateNameGroup = (nameGroup) => {
+    const schema = Joi.string()
+        .min(4) // Longueur minimale
+        .max(20) // Longueur maximale
+        .required();
+        
+    return schema.validate(nameGroup);
+};
+
 const Group = sequelize.define('Group', {
     name: {
         type: DataTypes.STRING,
@@ -37,6 +57,16 @@ const Group = sequelize.define('Group', {
 });
 
 Group.beforeCreate(async (group) => {
+    const { error : passwordError } = validatePassword(group.password);
+    if (passwordError) {
+        throw new Error(passwordError.details[0].message);
+    }
+
+    const { error : nameGroupError } = validateNameGroup(group.name);
+    if (nameGroupError) {
+        throw new Error(nameGroupError.details[0].message);
+    }
+
     const salt = await bcrypt.genSalt(10);
     group.password = await bcrypt.hash(group.password, salt);
 });
@@ -54,7 +84,6 @@ Group.associate = (models) => {
     foreignKey: 'groupId',
     as: 'customTags'
     });
-    // ... autres associations existantes ...
 };
 
 module.exports = Group;
