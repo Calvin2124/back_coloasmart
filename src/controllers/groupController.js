@@ -146,7 +146,7 @@ exports.joinGroup = async (req, res) => {
             if (!created) {
                 return res.status(400).json({ message: 'L\'utilisateur est déjà membre de ce groupe.' });
             }
-            res.status(200).json({ message: 'Utilisateur ajouté au groupe avec succès' });
+            res.status(200).json({ message: 'Utilisateur ajouté au groupe avec succès', idGroup: group.id });
         } catch (dbError) {
             console.error('Erreur lors de l\'ajout de l\'utilisateur au groupe:', dbError);
             res.status(500).json({ message: "Erreur lors de l'ajout de l'utilisateur au groupe", error: dbError.message });
@@ -173,9 +173,9 @@ exports.joinGroup = async (req, res) => {
  */
 exports.leaveGroup = async (req, res) => {
 try {
-    const { userId, groupName } = req.body;
+    const { groupId, userId } = req.body;
     
-    const group = await Group.findOne({ where: { name: groupName } });
+    const group = await Group.findOne({ where: { id: groupId } });
     if (!group) {
     return res.status(404).json({ message: 'Groupe non trouvé.' });
     }

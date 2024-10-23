@@ -29,15 +29,21 @@ exports.connected = async (req, res, next) => {
             return res.status(404).json({ message: "Utilisateur non trouvé" });
         }
 
-        // Mapper les groupes associés à l'utilisateur
-        const groups = user.Groups.map(group => ({
-            id: group.id,
-            name: group.name,
-            isAdmin: group.UserGroup.isAdmin
+        // Parcourir les groupes associés à l'utilisateur et récupérer le nombre d'utilisateurs dans chaque groupe
+        const groups = await Promise.all(user.Groups.map(async group => {
+            // Compter le nombre d'utilisateurs dans chaque groupe
+            const userCount = await UserGroup.count({ where: { GroupId: group.id } });
+
+            return {
+                id: group.id,
+                name: group.name,
+                isAdmin: group.UserGroup.isAdmin,
+                userCount: userCount // Ajouter le nombre d'utilisateurs dans chaque groupe
+            };
         }));
 
-        // Envoyer la réponse JSON
-        return res.status(200).json(groups); // Ajout de 'return' pour s'assurer que la fonction s'arrête ici
+        // Envoyer la réponse JSON avec les groupes et leur nombre d'utilisateurs
+        return res.status(200).json(groups);
     } catch (error) {
         // Gérer les erreurs et envoyer une réponse d'erreur
         return res.status(500).json({ message: "Erreur lors de la récupération des groupes de l'utilisateur", error: error.message });
